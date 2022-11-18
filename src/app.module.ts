@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PlaywrightModule } from 'nestjs-playwright';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { FlexModule } from './flex/flex.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({isGlobal : true}),
     FlexModule
   ],
   controllers: [],

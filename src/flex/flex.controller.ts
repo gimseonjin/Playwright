@@ -14,11 +14,11 @@ export class FlexController {
     @Get()
     async getHello(): Promise<string> {
 
-        const robot = FlexRobot.creatRobot(await this.browser.newPage())
-
+        const browserPage = await this.browser.newPage()
+        
         const bookRequestDto = new BookReqeustDto("name", "link", "1", "100원", "reason")
-
-        robot.setBookInfo(bookRequestDto)
+        
+        const robot = new FlexRobot(browserPage, bookRequestDto)
 
         robot.run()
         

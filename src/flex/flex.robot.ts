@@ -3,22 +3,10 @@ import { BookReqeustDto } from './dto/book.reqest.dto';
 
 export class FlexRobot {
 
-    private bookRequestDto : BookReqeustDto    
-
     constructor(
-        private readonly page: Page
+        private readonly page: Page,
+        private readonly bookRequestDto : BookReqeustDto
     ){}
-
-    static creatRobot(page: Page) : FlexRobot{
-        const robot = new FlexRobot(page)
-        return robot
-    }
-
-    setBookInfo(
-        bookRequestDto : BookReqeustDto
-    ){
-        this.bookRequestDto = bookRequestDto
-    }
 
     run = async () => {
         await this.goToFlex()
@@ -29,15 +17,24 @@ export class FlexRobot {
     }
 
     goToFlex = async () => {
-        await this.page.goto('https://flex.team/auth/login');
+        await this.page.goto(process.env.FLEX_AUTH_URL);
     }
 
     login = async () => {
-        await this.page.getByPlaceholder('이메일 주소').click();
-        await this.page.getByPlaceholder('이메일 주소').fill('seonjin.kim@business-canvas.com');
-        await this.page.getByPlaceholder('이메일 주소').press('Enter');
-        await this.page.getByPlaceholder('비밀번호').fill('emm05235@@');
-        await this.page.getByPlaceholder('비밀번호').press('Enter');
+        const authInfo = [process.env.FLEX_AUTH_EMAIL, process.env.FLEX_AUTH_PASSWORD];
+
+        //authInfo.forEach(async(info) => await this.typedInfo(info));
+        for(const info of authInfo) await this.typedInfo(info);
+    }
+
+    typedInfo = async (info : string) => {
+        const jsonInfo = JSON.parse(info);
+        await this.typedInfoIntoPlaceholder(jsonInfo);
+    }
+
+    typedInfoIntoPlaceholder = async (info) => {
+        await this.page.getByPlaceholder(info.key).fill(info.value);
+        await this.page.getByPlaceholder(info.key).press('Enter');
     }
 
     enterPurchasePage = async () => {
@@ -47,24 +44,24 @@ export class FlexRobot {
     }
 
     typedBookInfo = async () => {
-        const bookInfo = this.bookRequestDto.getInfo()
-        
-        for(const info of bookInfo){
-            await this.typeInfoWithLabel(info)
-        }
+        const bookInfo = this.bookRequestDto.getInfo();
+
+        //bookInfo.forEach(async(value, key) => await this.typeInfoWithLabel(value, key));
+        for(const info of bookInfo) await this.typeInfoWithLabel(info[1], info[0]);
         
         // 결제 방식 선택하기는 드롭다운 방식이라 아래와 같이 하드코딩
         await this.page.locator('.ant-select-selection-search').click();
         await this.page.getByText('운영팀에 요청').nth(1).click();
     }
 
-    typeInfoWithLabel = async ([k, v]) =>{
+    typeInfoWithLabel = async (v : string, k : string) =>{
         await this.page.getByLabel(k).click();
         await this.page.getByLabel(k).fill(v);
     }
 
     save = async () => {
         await this.page.getByRole('banner').getByRole('button', { name: '취소' }).click();
+        //await this.page.getByRole('banner').getByRole('button', { name: '보내기' }).click();
     }
 
 }
