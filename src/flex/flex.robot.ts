@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { BookReqeustDto } from './dto/book.reqest.dto';
+import { BookReqeustDto } from '../common/book.reqest.dto';
 
 export class FlexRobot {
 

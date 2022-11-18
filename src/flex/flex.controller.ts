@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { InjectBrowser, InjectPage } from 'nestjs-playwright';
 import { Browser, Page } from '@playwright/test';
 import { FlexRobot } from './flex.robot';
-import { BookReqeustDto } from './dto/book.reqest.dto';
+import { BookReqeustDto } from '../common/book.reqest.dto';
 
 @Controller('flex')
 export class FlexController {
@@ -15,7 +15,7 @@ export class FlexController {
     async getHello(): Promise<string> {
 
         const browserPage = await this.browser.newPage()
-        
+
         const bookRequestDto = new BookReqeustDto("name", "link", "1", "100원", "reason")
         
         const robot = new FlexRobot(browserPage, bookRequestDto)
