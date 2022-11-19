@@ -7,7 +7,7 @@ import { BookCrawlerModule } from './book-crawler/book-crawler.module';
   imports: [
     ConfigModule.forRoot({isGlobal : true}),
     FlexModule,
-    BookCrawlerModule
+    BookCrawlerModule,
   ],
   controllers: [],
   providers: [],
