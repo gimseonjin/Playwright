@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { BookCrawler } from './book-crawler';
+import { BookCrawlerFactory } from './book-crawler.fatory';
 
 @Module({
-  providers: [BookCrawler]
+  providers: [BookCrawlerFactory]
 })
 export class BookCrawlerModule {}
